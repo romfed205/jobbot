@@ -27,14 +27,8 @@ def start_bot_tracker():
     telegram_client.connect()
 
     if not telegram_client.is_user_authorized():
-        phone = input('Enter your phone number: ')
-        telegram_client.send_code_request(phone)
-        code = input('Enter the code you received: ')
-        try:
-            telegram_client.sign_in(phone, code)
-        except SessionPasswordNeededError:
-            password = input('Enter your password: ')
-            telegram_client.sign_in(password=password)
+        print("Сперва выполните python manage.py create_session")
+        return
 
     @telegram_client.on(events.NewMessage(incoming=True))
     async def tracking_handler(event):
