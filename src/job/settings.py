@@ -144,7 +144,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
-CSRF_TRUSTED_ORIGINS=["https://6289-178-66-156-0.ngrok-free.app"]
+CSRF_TRUSTED_ORIGINS = ["https://6289-178-66-156-0.ngrok-free.app"]
 
 CONSTANCE_BACKEND = "constance.backends.database.DatabaseBackend"
 
@@ -279,7 +279,8 @@ CONSTANCE_CONFIG = {
     ),
     "VACANCY_AUTHOR_BTN_INLINE": (
         "✍️ Связаться с автором",
-        "Текст кнопки под текстом вакансии, пересылающая на аккаунт автора (при наличии username)"
+        "Текст кнопки под текстом вакансии, пересылающая на аккаунт автора (при наличии username)",
+        str
     ),
     "COMPLAINT_ON_AUTHOR_BTN_INLINE": (
         "⚠️ Жалоба на автора",
@@ -314,7 +315,7 @@ CONSTANCE_CONFIG = {
     "COMPLAINT_ACCOUNT_USERNAME": (
         "Izyaaash",
         "Ник пользователя в телеграм, к которому перенаправляется пользователь по кнопке пожаловаться на автора",
-        "str"
+        str
     )
 }
 
