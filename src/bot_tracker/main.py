@@ -1,9 +1,8 @@
 import os
 from telethon.sync import TelegramClient
-from django_telethon.sessions import DjangoSession
-from django_telethon.models import App, ClientSession
 from constance import config
 from telethon import events
+from telethon.sessions import StringSession
 
 from bot_tracker.models import TrackingChat
 from bot_tracker.services.get_text_category_service import GetTextCategoryService
@@ -14,23 +13,10 @@ os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 def start_bot_tracker():
     API_ID = config.TRACKING_API_ID
     API_HASH = config.TRACKING_API_HASH
-    try:
-        app = App.objects.get(
-            api_id=API_ID,
-            api_hash=API_HASH
-        )
-        cs = ClientSession.objects.get(
-            name=config.TRACKING_SESSION_NAME
-        )
-        telegram_client = TelegramClient(DjangoSession(client_session=cs), app.api_id, app.api_hash)
-        telegram_client.connect()
+    STRING_SESSION = config.STRING_SESSION
 
-        if not telegram_client.is_user_authorized():
-            print("Сессия не авторизована")
-            return
-    except:
-        print("Сперва нужно выполнить python manage.py create_session")
-        return
+    telegram_client = TelegramClient(StringSession(STRING_SESSION), API_ID, API_HASH, system_version="4.16.30-vxCUSTOM")
+    telegram_client.connect()
 
     @telegram_client.on(events.NewMessage(incoming=True))
     async def tracking_handler(event):

@@ -312,6 +312,11 @@ CONSTANCE_CONFIG = {
         "API HASH для бота-прослушивальщика",
         str
     ),
+    "STRING_SESSION": (
+        os.getenv("STRING_SESSION"),
+        "Строка сессии telethon",
+        str
+    ),
     "COMPLAINT_ACCOUNT_USERNAME": (
         "Izyaaash",
         "Ник пользователя в телеграм, к которому перенаправляется пользователь по кнопке пожаловаться на автора",
@@ -334,6 +339,7 @@ CONSTANCE_CONFIG_FIELDSETS = {
             "TRACKING_API_ID",
             "TRACKING_API_HASH",
             "COMPLAINT_ACCOUNT_USERNAME",
+            "STRING_SESSION",
         ),
         "collapse": True
     },
