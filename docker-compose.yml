@@ -12,7 +12,6 @@ services:
       - ./.env
     depends_on:
       - database
-      - redis
     ports:
       - "8000:8000"
     volumes:
@@ -34,7 +33,6 @@ services:
       - ./.env
     depends_on:
       - database
-      - redis
     volumes:
       - ./src:/app
 
@@ -49,7 +47,6 @@ services:
       - ./.env
     depends_on:
       - database
-      - redis
     volumes:
       - ./src:/app
 
