@@ -8,6 +8,7 @@ def main():
     """Run administrative tasks."""
     dotenv.read_dotenv()
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'job.settings')
+    os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

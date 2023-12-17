@@ -1,4 +1,4 @@
-psycopg2
+psycopg2-binary
 django==4.1.1
 django-dotenv
 pytelegrambotapi==4.9.0
@@ -7,3 +7,4 @@ python-dateutil
 django-easy-select2
 Telethon==1.28.2
 django-admin-inline-paginator
+django-telethon

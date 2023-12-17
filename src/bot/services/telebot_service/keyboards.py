@@ -94,3 +94,13 @@ def get_currencies_keyboard(category):
     back_btn = telebot.types.InlineKeyboardButton(config.BACK_BTN_TEXT_INLINE, callback_data=f"choose_category_for_subscribe")
     markup.add(back_btn)
     return markup
+
+
+def get_vacancy_footer_keyboard(author_username=None):
+    markup = telebot.types.InlineKeyboardMarkup(row_width=1)
+    if author_username:
+        author_btn = telebot.types.InlineKeyboardButton(config.VACANCY_AUTHOR_BTN_INLINE, url=f"https://t.me/{author_username}")
+        markup.add(author_btn)
+    complaint_on_author_btn = telebot.types.InlineKeyboardButton(config.COMPLAINT_ON_AUTHOR_BTN_INLINE, url=f"https://t.me/{config.COMPLAINT_ACCOUNT_USERNAME}")
+    markup.add(complaint_on_author_btn)
+    return markup

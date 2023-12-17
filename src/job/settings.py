@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django_telethon',
     'constance',
     'constance.backends.database',
     'easy_select2',
@@ -160,7 +161,7 @@ CONSTANCE_CONFIG = {
         "{0} - название категории и {1} - дату окончания подписки (они подставятся автоматически)",
         str
     ),
-    "START_TEXT" : (
+    "START_TEXT": (
         "Приветствуем вас в боте по поиску работы!",
         "Сообщение, отправляющееся пользователю после запуска бота",
         str
@@ -276,6 +277,15 @@ CONSTANCE_CONFIG = {
         "Название кнопки под реквизитами оплаты подписки",
         str
     ),
+    "VACANCY_AUTHOR_BTN_INLINE": (
+        "✍️ Связаться с автором",
+        "Текст кнопки под текстом вакансии, пересылающая на аккаунт автора (при наличии username)"
+    ),
+    "COMPLAINT_ON_AUTHOR_BTN_INLINE": (
+        "⚠️ Жалоба на автора",
+        "Текст кнопки под текстом вакансии, пересылающая на служебный аккаунт для жалоб",
+        str
+    ),
     "PAYMENT_CONTACT_URL": (
         "https://t.me/Izyaaash",
         "Ссылка на контакт в кнопке под текстом оплаты",
@@ -300,6 +310,11 @@ CONSTANCE_CONFIG = {
         os.getenv("TRACKING_API_HASH"),
         "API HASH для бота-прослушивальщика",
         str
+    ),
+    "COMPLAINT_ACCOUNT_USERNAME": (
+        "Izyaaash",
+        "Ник пользователя в телеграм, к которому перенаправляется пользователь по кнопке пожаловаться на автора",
+        "str"
     )
 }
 
@@ -317,6 +332,7 @@ CONSTANCE_CONFIG_FIELDSETS = {
             "TRACKING_SESSION_NAME",
             "TRACKING_API_ID",
             "TRACKING_API_HASH",
+            "COMPLAINT_ACCOUNT_USERNAME",
         ),
         "collapse": True
     },
@@ -351,7 +367,9 @@ CONSTANCE_CONFIG_FIELDSETS = {
             "FAQ_BTN_TEXT",
             "BACK_BTN_TEXT",
             "BACK_BTN_TEXT_INLINE",
-            "PAYMENT_CONTACT_BTN_TEXT"
+            "PAYMENT_CONTACT_BTN_TEXT",
+            "VACANCY_AUTHOR_BTN_INLINE",
+            "COMPLAINT_ON_AUTHOR_BTN_INLINE"
         ),
         "collapse": True
     }
