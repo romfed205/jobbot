@@ -2,7 +2,6 @@ import os
 from telethon.sync import TelegramClient
 from django_telethon.sessions import DjangoSession
 from django_telethon.models import App, ClientSession
-from telethon.errors import SessionPasswordNeededError
 from constance import config
 from telethon import events
 
@@ -15,19 +14,22 @@ os.environ["DJANGO_ALLOW_ASYNC_UNSAFE"] = "true"
 def start_bot_tracker():
     API_ID = config.TRACKING_API_ID
     API_HASH = config.TRACKING_API_HASH
+    try:
+        app = App.objects.get(
+            api_id=API_ID,
+            api_hash=API_HASH
+        )
+        cs = ClientSession.objects.get(
+            name=config.TRACKING_SESSION_NAME
+        )
+        telegram_client = TelegramClient(DjangoSession(client_session=cs), app.api_id, app.api_hash)
+        telegram_client.connect()
 
-    app, is_created = App.objects.update_or_create(
-        api_id=API_ID,
-        api_hash=API_HASH
-    )
-    cs, cs_is_created = ClientSession.objects.update_or_create(
-        name=config.TRACKING_SESSION_NAME,
-    )
-    telegram_client = TelegramClient(DjangoSession(client_session=cs), app.api_id, app.api_hash)
-    telegram_client.connect()
-
-    if not telegram_client.is_user_authorized():
-        print("Сперва выполните python manage.py create_session")
+        if not telegram_client.is_user_authorized():
+            print("Сессия не авторизована")
+            return
+    except:
+        print("Сперва нужно выполнить python manage.py create_session")
         return
 
     @telegram_client.on(events.NewMessage(incoming=True))
