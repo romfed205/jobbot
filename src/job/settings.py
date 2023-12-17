@@ -297,6 +297,16 @@ CONSTANCE_CONFIG = {
         "ID чата администратора",
         str
     ),
+    "BOT_INFO_FOOTER": (
+        "------------------\nЗаказ найден через: @tg_job_test_bot",
+        "Название телеграмм бота, которое будет прикрепляться ссылкой внизу текста вакансии",
+        str
+    ),
+    "BOT_LOGO_IMAGE_ID": (
+        "-",
+        "ID лого бота, которое будет отправляться вместе с большей частью текста",
+        str
+    ),
     "TRACKING_SESSION_NAME": (
         os.getenv("TRACKING_SESSION_NAME"),
         "Название сессии для бота-прослушивальщика",
@@ -329,7 +339,9 @@ CONSTANCE_CONFIG_FIELDSETS = {
     "Настройки": {
         "fields": (
             "PAYMENT_CONTACT_URL",
-            "ADMIN_CHAT_ID"
+            "ADMIN_CHAT_ID",
+            "BOT_INFO_FOOTER",
+            "BOT_LOGO_IMAGE_ID",
         ),
         "collapse": True
     },

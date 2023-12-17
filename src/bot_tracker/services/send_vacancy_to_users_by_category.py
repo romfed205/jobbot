@@ -1,4 +1,6 @@
 from django.utils import timezone
+from constance import config
+
 from bot.models import UserCategory
 from bot.services.telebot_service.bot_main import bot
 from bot.services.telebot_service.keyboards import get_vacancy_footer_keyboard
@@ -13,7 +15,7 @@ class SendVacancyToUsersByCategory:
         ).select_related("user")
         keyboard = get_vacancy_footer_keyboard(event.message.sender.username)
 
-        text = f"{event.message.text}\n\n------------------\nЗаказ найден через: {event.message.chat.title}\n@{event.message.sender.username}"
+        text = f"{event.message.text}\n\n{config.BOT_INFO_FOOTER}"
         for user_category in users_categories:
             try:
                 bot.send_message(

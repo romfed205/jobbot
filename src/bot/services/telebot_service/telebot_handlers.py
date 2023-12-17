@@ -65,11 +65,19 @@ class TeleBotHandlersService:
                     config.SUBSCRIPTION_BY_CATEGORY_TEXT.format(category.title, user_category.finish_date.strftime("%d.%m.%Y %H:%M:%S"))
                 )
             else:
-                bot.send_message(
-                    call.message.chat.id,
-                    config.BUY_SUBSCRIPTION_TO_CHOOSE_CATEGORY_TEXT,
-                    reply_markup=buy_subscription_to_choose_category()
-                )
+                try:
+                    bot.send_photo(
+                        call.message.chat.id,
+                        config.BOT_LOGO_IMAGE_ID,
+                        caption=config.BUY_SUBSCRIPTION_TO_CHOOSE_CATEGORY_TEXT,
+                        reply_markup=buy_subscription_to_choose_category()
+                    )
+                except:
+                    bot.send_message(
+                        call.message.chat.id,
+                        config.BUY_SUBSCRIPTION_TO_CHOOSE_CATEGORY_TEXT,
+                        reply_markup=buy_subscription_to_choose_category()
+                    )
 
         @bot.callback_query_handler(func=lambda call: call.data == "choose_category_for_subscribe")
         def choose_category_for_subscribe(call):
@@ -81,11 +89,19 @@ class TeleBotHandlersService:
             except:
                 pass
 
-            bot.send_message(
-                call.message.chat.id,
-                config.CHOOSE_CATEGORY_FOR_SUBSCRIPTION_TEXT,
-                reply_markup=choose_category_markup("choose_category_for_subscription")
-            )
+            try:
+                bot.send_photo(
+                    call.message.chat.id,
+                    config.BOT_LOGO_IMAGE_ID,
+                    caption=config.CHOOSE_CATEGORY_FOR_SUBSCRIPTION_TEXT,
+                    reply_markup=choose_category_markup("choose_category_for_subscription")
+                )
+            except:
+                bot.send_message(
+                    call.message.chat.id,
+                    config.CHOOSE_CATEGORY_FOR_SUBSCRIPTION_TEXT,
+                    reply_markup=choose_category_markup("choose_category_for_subscription")
+                )
 
         @bot.callback_query_handler(func=lambda call: call.data.startswith("choose_category_for_subscription#"))
         def choose_category_for_subscription(call):
@@ -99,11 +115,19 @@ class TeleBotHandlersService:
             except:
                 pass
 
-            bot.send_message(
-                call.message.chat.id,
-                config.CHOOSE_SUBSCRIPTION_BY_CATEGORY_TEXT,
-                reply_markup=get_currencies_keyboard(category)
-            )
+            try:
+                bot.send_photo(
+                    call.message.chat.id,
+                    config.BOT_LOGO_IMAGE_ID,
+                    caption=config.CHOOSE_SUBSCRIPTION_BY_CATEGORY_TEXT,
+                    reply_markup=get_currencies_keyboard(category)
+                )
+            except:
+                bot.send_message(
+                    call.message.chat.id,
+                    config.CHOOSE_SUBSCRIPTION_BY_CATEGORY_TEXT,
+                    reply_markup=get_currencies_keyboard(category)
+                )
 
         @bot.callback_query_handler(func=lambda call: call.data.startswith("choose_currency#"))
         def choose_currency(call):
@@ -118,11 +142,19 @@ class TeleBotHandlersService:
             except:
                 pass
 
-            bot.send_message(
-                call.message.chat.id,
-                config.CHOOSE_SUBSCRIPTION_PRICES_TEXT,
-                reply_markup=get_subscription_prices_markup(category, currency)
-            )
+            try:
+                bot.send_photo(
+                    call.message.chat.id,
+                    config.BOT_LOGO_IMAGE_ID,
+                    caption=config.CHOOSE_SUBSCRIPTION_PRICES_TEXT,
+                    reply_markup=get_subscription_prices_markup(category, currency)
+                )
+            except:
+                bot.send_message(
+                    call.message.chat.id,
+                    config.CHOOSE_SUBSCRIPTION_PRICES_TEXT,
+                    reply_markup=get_subscription_prices_markup(category, currency)
+                )
 
         @bot.callback_query_handler(func=lambda call: call.data.startswith("choose_subscription_price#"))
         def choose_subscription_price(call):
@@ -136,20 +168,36 @@ class TeleBotHandlersService:
             except:
                 pass
 
-            bot.send_message(
-                call.message.chat.id,
-                config.PRICE_DESCRIPTION_TEXT.format(price.subscription.title, price.price, price.currency.title, price.currency.currency_requisites),
-                reply_markup=get_payment_contact_markup()
-            )
+            try:
+                bot.send_photo(
+                    call.message.chat.id,
+                    config.BOT_LOGO_IMAGE_ID,
+                    caption=config.PRICE_DESCRIPTION_TEXT.format(price.subscription.title, price.price, price.currency.title, price.currency.currency_requisites),
+                    reply_markup=get_payment_contact_markup()
+                )
+            except:
+                bot.send_message(
+                    call.message.chat.id,
+                    config.PRICE_DESCRIPTION_TEXT.format(price.subscription.title, price.price, price.currency.title, price.currency.currency_requisites),
+                    reply_markup=get_payment_contact_markup()
+                )
 
         @bot.message_handler(commands=["start"])
         def _add_user(message):
             if User.objects.filter(chat_id=message.chat.id).exists():
-                bot.send_message(
-                    message.chat.id,
-                    config.WELCOME_BACK_TEXT,
-                    reply_markup=main_menu_markup()
-                )
+                try:
+                    bot.send_photo(
+                        message.chat.id,
+                        config.BOT_LOGO_IMAGE_ID,
+                        caption=config.WELCOME_BACK_TEXT,
+                        reply_markup=main_menu_markup()
+                    )
+                except:
+                    bot.send_message(
+                        message.chat.id,
+                        config.WELCOME_BACK_TEXT,
+                        reply_markup=main_menu_markup()
+                    )
             else:
                 user = User(
                     username=str(message.chat.id),
@@ -158,53 +206,114 @@ class TeleBotHandlersService:
                     chat_id=message.chat.id
                 )
                 user.save()
-                bot.send_message(
-                    message.chat.id,
-                    config.START_TEXT,
-                    reply_markup=main_menu_markup()
-                )
+                try:
+                    bot.send_photo(
+                        message.chat.id,
+                        config.BOT_LOGO_IMAGE_ID,
+                        caption=config.START_TEXT,
+                        reply_markup=main_menu_markup()
+                    )
+                except:
+                    bot.send_message(
+                        message.chat.id,
+                        config.START_TEXT,
+                        reply_markup=main_menu_markup()
+                    )
 
         @bot.message_handler(content_types=["text"])
         def _buttons_handler(message):
             if message.text == config.CHOOSE_CATEGORY_BTN_TEXT:
-                bot.send_message(
-                    message.chat.id,
-                    config.CHOOSE_CATEGORY_TEXT,
-                    reply_markup=choose_category_markup()
-                )
+                try:
+                    bot.send_photo(
+                        message.chat.id,
+                        config.BOT_LOGO_IMAGE_ID,
+                        caption=config.CHOOSE_CATEGORY_TEXT,
+                        reply_markup=choose_category_markup()
+                    )
+                except:
+                    bot.send_message(
+                        message.chat.id,
+                        config.CHOOSE_CATEGORY_TEXT,
+                        reply_markup=choose_category_markup()
+                    )
             elif message.text == config.GET_SUBSCRIPTION_BTN_TEXT:
-                bot.send_message(
-                    message.chat.id,
-                    config.CHOOSE_CATEGORY_FOR_SUBSCRIPTION_TEXT,
-                    reply_markup=choose_category_markup("choose_category_for_subscription")
-                )
+                try:
+                    bot.send_photo(
+                        message.chat.id,
+                        config.BOT_LOGO_IMAGE_ID,
+                        caption=config.CHOOSE_CATEGORY_FOR_SUBSCRIPTION_TEXT,
+                        reply_markup=choose_category_markup("choose_category_for_subscription")
+                    )
+                except:
+                    bot.send_message(
+                        message.chat.id,
+                        config.CHOOSE_CATEGORY_FOR_SUBSCRIPTION_TEXT,
+                        reply_markup=choose_category_markup("choose_category_for_subscription")
+                    )
             elif message.text == config.ABOUT_BTN_TEXT:
-                bot.send_message(
-                    message.chat.id,
-                    config.ABOUT_TEXT
-                )
+                try:
+                    bot.send_photo(
+                        message.chat.id,
+                        config.BOT_LOGO_IMAGE_ID,
+                        caption=config.ABOUT_TEXT
+                    )
+                except:
+                    bot.send_message(
+                        message.chat.id,
+                        config.ABOUT_TEXT
+                    )
             elif message.text == config.HELP_BTN_TEXT:
-                bot.send_message(
-                    message.chat.id,
-                    config.HELP_TEXT,
-                    reply_markup=help_markup()
-                )
+                try:
+                    bot.send_photo(
+                        message.chat.id,
+                        config.BOT_LOGO_IMAGE_ID,
+                        caption=config.HELP_TEXT,
+                        reply_markup=help_markup()
+                    )
+                except:
+                    bot.send_message(
+                        message.chat.id,
+                        config.HELP_TEXT,
+                        reply_markup=help_markup()
+                    )
             elif message.text == config.LINE_TO_SUPPORT_BTN_TEXT:
-                bot.send_message(
-                    message.chat.id,
-                    config.LINE_TO_SUPPORT_TEXT
-                )
+                try:
+                    bot.send_photo(
+                        message.chat.id,
+                        config.BOT_LOGO_IMAGE_ID,
+                        caption=config.LINE_TO_SUPPORT_TEXT
+                    )
+                except:
+                    bot.send_message(
+                        message.chat.id,
+                        config.LINE_TO_SUPPORT_TEXT
+                    )
             elif message.text == config.FAQ_BTN_TEXT:
-                bot.send_message(
-                    message.chat.id,
-                    config.FAQ_TEXT
-                )
+                try:
+                    bot.send_photo(
+                        message.chat.id,
+                        config.BOT_LOGO_IMAGE_ID,
+                        caption=config.FAQ_TEXT
+                    )
+                except:
+                    bot.send_message(
+                        message.chat.id,
+                        config.FAQ_TEXT
+                    )
             elif message.text == config.BACK_BTN_TEXT:
-                bot.send_message(
-                    message.chat.id,
-                    config.MAIN_MENU_TEXT,
-                    reply_markup=main_menu_markup()
-                )
+                try:
+                    bot.send_photo(
+                        message.chat.id,
+                        config.BOT_LOGO_IMAGE_ID,
+                        caption=config.MAIN_MENU_TEXT,
+                        reply_markup=main_menu_markup()
+                    )
+                except:
+                    bot.send_message(
+                        message.chat.id,
+                        config.MAIN_MENU_TEXT,
+                        reply_markup=main_menu_markup()
+                    )
 
     def execute(self):
         self._run_handlers()
