@@ -9,5 +9,5 @@ class GetTextCategoryService:
         for category in categories:
             signal_words = category.signal_words.split("\n")
             for signal_word in signal_words:
-                if signal_word.lower() in text:
+                if signal_word.lower().strip() in text:
                     return category
