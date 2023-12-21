@@ -13,7 +13,7 @@ class SendVacancyToUsersByCategory:
             category=category,
             finish_date__gte=timezone.now()
         ).select_related("user")
-        keyboard = get_vacancy_footer_keyboard(event.message.sender.username)
+        keyboard = get_vacancy_footer_keyboard(event)
 
         text = f"{event.message.text}\n\n{config.BOT_INFO_FOOTER}"
         for user_category in users_categories:

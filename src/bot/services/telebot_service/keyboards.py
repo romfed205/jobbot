@@ -2,6 +2,7 @@ import telebot
 from constance import config
 
 from bot.models import Category, Currency, Subscription, SubscriptionPrice, CategorySubscription
+from bot_tracker.models import TrackingChat
 
 
 def main_menu_markup():
@@ -96,11 +97,17 @@ def get_currencies_keyboard(category):
     return markup
 
 
-def get_vacancy_footer_keyboard(author_username=None):
+def get_vacancy_footer_keyboard(event):
     markup = telebot.types.InlineKeyboardMarkup(row_width=1)
+    author_username = event.message.sender.username
     if author_username:
         author_btn = telebot.types.InlineKeyboardButton(config.VACANCY_AUTHOR_BTN_INLINE, url=f"https://t.me/{author_username}")
         markup.add(author_btn)
+    else:
+        chat = TrackingChat.objects.filter(chat_id=event.message.chat_id).first()
+        if chat and chat.chat_source:
+            author_btn = telebot.types.InlineKeyboardButton(config.VACANCY_AUTHOR_BTN_INLINE, url=f"https://t.me/{chat.chat_source}/{event.message.id}")
+            markup.add(author_btn)
     complaint_on_author_btn = telebot.types.InlineKeyboardButton(config.COMPLAINT_ON_AUTHOR_BTN_INLINE, url=f"https://t.me/{config.COMPLAINT_ACCOUNT_USERNAME}")
     markup.add(complaint_on_author_btn)
     return markup
