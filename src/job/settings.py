@@ -155,12 +155,6 @@ CONSTANCE_CONFIG = {
         "{0} - название категории и {1} - дату окончания подписки (они подставятся автоматически)",
         str
     ),
-    "SUBSCRIPTION_BY_CATEGORY_TEXT": (
-        "Ваша подписка по категории {0} активна до {1}",
-        "Текст сообщения при просмотре подписки пользователя. Обязательно содержит:"
-        "{0} - название категории и {1} - дату окончания подписки (они подставятся автоматически)",
-        str
-    ),
     "START_TEXT": (
         "Приветствуем вас в боте по поиску работы!",
         "Сообщение, отправляющееся пользователю после запуска бота",
@@ -169,11 +163,6 @@ CONSTANCE_CONFIG = {
     "WELCOME_BACK_TEXT": (
         "С возвращением!",
         "Текст сообщения, если пользователь повторно вызывает команду активации бота",
-        str
-    ),
-    "BUY_SUBSCRIPTION_TO_CHOOSE_CATEGORY_TEXT": (
-        "Для активации категории сначала оформите подписку по кнопке ниже",
-        "Текст сообщения, приходящий вместе с кнопкой оформления подписки при выборе категории",
         str
     ),
     "CHOOSE_CURRENCY_TEXT": (
@@ -186,39 +175,9 @@ CONSTANCE_CONFIG = {
         "Текст сообщения, отправляющегося по кнопке получения информации о сервисе",
         str
     ),
-    "HELP_TEXT": (
-        "Выберите нужный раздел для помощи",
-        "Текст сообщения, отправляющегося при переходе в меню помощи",
-        str
-    ),
-    "LINE_TO_SUPPORT_TEXT": (
-        "Поддержка работает под ником @help_job, пишите туда",
-        "Текст сообщения, отправляющегося при попытке связи с поддержкой",
-        str
-    ),
-    "FAQ_TEXT": (
-        "Ссылка на FAQ",
-        "Текст сообщения, отправляемого по запросу FAQ",
-        str
-    ),
-    "CHOOSE_CATEGORY_FOR_SUBSCRIPTION_TEXT": (
-        "Выберите категорию, для которой хотите преобрести подписку",
-        "Текст сообщения, отправляющегося при попытке купить подписку с отправкой вариантов категорий",
-        str
-    ),
-    "CHOOSE_SUBSCRIPTION_BY_CATEGORY_TEXT": (
-        "Выберите подписку",
-        "Текст, отправляющийся с выбором подписки для покупки",
-        str
-    ),
     "CHOOSE_SUBSCRIPTION_PRICES_TEXT": (
         "Выберите способ оплаты",
         "Текст, отправляющийся с выбором цены и валюты для покупки подписки",
-        str
-    ),
-    "MAIN_MENU_TEXT": (
-        "Главное меню",
-        "Текст сообщения при переходе в главное меню бота",
         str
     ),
     "PRICE_DESCRIPTION_TEXT": (
@@ -227,44 +186,9 @@ CONSTANCE_CONFIG = {
         "Текст сообщения, выводящегося при выборе цены с валютой за подписку. Должно содержать:"
         "{0} - название подписки, {1} - цена, {2} - валюта, {3} - реквизиты"
     ),
-    "CHOOSE_CATEGORY_BTN_TEXT": (
-        "Выбрать категорию заказов",
-        "Текст кнопка для перехода к выбору типа заказа",
-        str
-    ),
-    "GET_SUBSCRIPTION_BTN_TEXT": (
-        "Оформить подписку",
-        "Текст кнопка для перехода к оформлению подписки",
-        str
-    ),
     "ABOUT_BTN_INLINE": (
         "О сервисе",
         "Текст кнопки для получения информации о сервисе",
-        str
-    ),
-    "HELP_BTN_TEXT": (
-        "Помощь",
-        "Текст кнопка для перехода к меню помощь",
-        str
-    ),
-    "LINE_TO_SUPPORT_BTN_TEXT": (
-        "Связаться с поддержкой",
-        "Текст кнопка для получения контактов техподдержки",
-        str
-    ),
-    "FAQ_BTN_TEXT": (
-        "F.A.Q.",
-        "Текст кнопка для получения ссылки на ответы на самые распространенные вопросы",
-        str
-    ),
-    "BACK_BTN_TEXT": (
-        "Вернуться назад",
-        "Текст кнопка для перехода к предыдущему меню",
-        str
-    ),
-    "BACK_BTN_TEXT_INLINE": (
-        "Вернуться назад",
-        "Текст кнопки в тексте для перехода к предыдущему меню",
         str
     ),
     "PAYMENT_CONTACT_BTN_TEXT": (
@@ -282,7 +206,7 @@ CONSTANCE_CONFIG = {
         "Текст кнопки под текстом вакансии, пересылающая на служебный аккаунт для жалоб",
         str
     ),
-    "PAYMENT_CONTACT_URL": (
+    "PAYMENT_CONTACT_LINK": (
         "https://t.me/Izyaaash",
         "Ссылка на контакт в кнопке под текстом оплаты",
         str
@@ -423,7 +347,7 @@ CONSTANCE_CONFIG = {
 CONSTANCE_CONFIG_FIELDSETS = {
     "Настройки": {
         "fields": (
-            "PAYMENT_CONTACT_URL",
+            "PAYMENT_CONTACT_LINK",
             "ADMIN_CHAT_ID",
             "BOT_INFO_FOOTER",
             "BOT_LOGO_IMAGE_ID",
@@ -440,37 +364,6 @@ CONSTANCE_CONFIG_FIELDSETS = {
         ),
         "collapse": True
     },
-    "Тексты сообщений": {
-        "fields": (
-            "BUY_SUBSCRIPTION_TO_CHOOSE_CATEGORY_TEXT",
-            "HELP_TEXT",
-            "LINE_TO_SUPPORT_TEXT",
-            "FAQ_TEXT",
-            "MAIN_MENU_TEXT",
-            "PRICE_DESCRIPTION_TEXT",
-            "ACTIVATE_SUBSCRIPTION_TEXT",
-            "SUBSCRIPTION_BY_CATEGORY_TEXT",
-            "CHOOSE_CATEGORY_FOR_SUBSCRIPTION_TEXT",
-            "CHOOSE_SUBSCRIPTION_BY_CATEGORY_TEXT",
-        ),
-        "collapse": True
-    },
-    "Тексты кнопок": {
-        "fields": (
-            "CHOOSE_CATEGORY_BTN_TEXT",
-            "GET_SUBSCRIPTION_BTN_TEXT",
-            "HELP_BTN_TEXT",
-            "LINE_TO_SUPPORT_BTN_TEXT",
-            "FAQ_BTN_TEXT",
-            "BACK_BTN_TEXT",
-            "BACK_BTN_TEXT_INLINE",
-            "PAYMENT_CONTACT_BTN_TEXT",
-            "VACANCY_AUTHOR_BTN_INLINE",
-            "COMPLAINT_ON_AUTHOR_BTN_INLINE",
-        ),
-        "collapse": True
-    },
-    # ----------------------------------------------------------------
     "Инлайн кнопки": {
         "fields": (
             "FIND_PROJECT_BTN_INLINE",
@@ -482,7 +375,10 @@ CONSTANCE_CONFIG_FIELDSETS = {
             "NEWS_AND_UPDATES_BTN_INLINE",
             "BACK_BTN_INLINE",
             "CONTACT_SUPPORT_BTN_INLINE",
-            "DIRECTORY_OPEN_BTN_INLINE"
+            "DIRECTORY_OPEN_BTN_INLINE",
+            "PAYMENT_CONTACT_BTN_TEXT",
+            "VACANCY_AUTHOR_BTN_INLINE",
+            "COMPLAINT_ON_AUTHOR_BTN_INLINE",
         ),
         "collapse": True
     },
@@ -506,6 +402,8 @@ CONSTANCE_CONFIG_FIELDSETS = {
             "CHOOSE_CURRENCY_TEXT",
             "CHOOSE_SUBSCRIPTION_PRICES_TEXT",
             "PAYMENT_INFO_TEXT",
+            "PRICE_DESCRIPTION_TEXT",
+            "ACTIVATE_SUBSCRIPTION_TEXT",
         )
     }
 }

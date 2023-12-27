@@ -102,7 +102,7 @@ def get_subscription_prices_markup(category, currency):
 
 def get_payment_contact_markup(price):
     markup = telebot.types.InlineKeyboardMarkup(row_width=2)
-    btn = telebot.types.InlineKeyboardButton(config.PAYMENT_CONTACT_BTN_TEXT, url=config.PAYMENT_CONTACT_URL)
+    btn = telebot.types.InlineKeyboardButton(config.PAYMENT_CONTACT_BTN_TEXT, url=config.PAYMENT_CONTACT_LINK)
     category_subscription = CategorySubscription.objects.filter(subscription=price.subscription).first()
     back_btn = telebot.types.InlineKeyboardButton(config.BACK_BTN_INLINE, callback_data=f"choose_currency#{category_subscription.category.id}#{price.currency.id}")
     markup.add(btn)
