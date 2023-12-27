@@ -1,18 +1,10 @@
 from django.contrib.auth import get_user_model
 from constance import config
+from telebot.types import InputMediaPhoto
 
 from .bot_main import bot
 from bot.models import Category, Subscription, SubscriptionPrice, Currency
-from bot.services.telebot_service.keyboards import (
-    main_menu_markup,
-    choose_category_markup,
-    buy_subscription_to_choose_category,
-    help_markup,
-    get_subscriptions_by_category_markup,
-    get_subscription_prices_markup,
-    get_payment_contact_markup,
-    get_currencies_keyboard
-)
+from bot.services.telebot_service.keyboards import *
 
 User = get_user_model()
 
@@ -54,149 +46,21 @@ class TeleBotHandlersService:
             except Exception:
                 bot.send_message(message.chat.id, "Файл не распознан")
 
-        @bot.callback_query_handler(func=lambda call: call.data.startswith("choose_category#"))
-        def choose_category(call):
-            user = User.objects.get(chat_id=call.message.chat.id)
-            category = Category.objects.get(id=int(call.data.split("#")[1]))
-            user_category, have_active_category = user.have_active_category(category)
-            if have_active_category:
-                bot.send_message(
-                    call.message.chat.id,
-                    config.SUBSCRIPTION_BY_CATEGORY_TEXT.format(category.title, user_category.finish_date.strftime("%d.%m.%Y %H:%M:%S"))
-                )
-            else:
-                try:
-                    bot.send_photo(
-                        call.message.chat.id,
-                        config.BOT_LOGO_IMAGE_ID,
-                        caption=config.BUY_SUBSCRIPTION_TO_CHOOSE_CATEGORY_TEXT,
-                        reply_markup=buy_subscription_to_choose_category()
-                    )
-                except:
-                    bot.send_message(
-                        call.message.chat.id,
-                        config.BUY_SUBSCRIPTION_TO_CHOOSE_CATEGORY_TEXT,
-                        reply_markup=buy_subscription_to_choose_category()
-                    )
-
-        @bot.callback_query_handler(func=lambda call: call.data == "choose_category_for_subscribe")
-        def choose_category_for_subscribe(call):
-            try:
-                bot.delete_message(
-                    call.message.chat.id,
-                    call.message.message_id
-                )
-            except:
-                pass
-
-            try:
-                bot.send_photo(
-                    call.message.chat.id,
-                    config.BOT_LOGO_IMAGE_ID,
-                    caption=config.CHOOSE_CATEGORY_FOR_SUBSCRIPTION_TEXT,
-                    reply_markup=choose_category_markup("choose_category_for_subscription")
-                )
-            except:
-                bot.send_message(
-                    call.message.chat.id,
-                    config.CHOOSE_CATEGORY_FOR_SUBSCRIPTION_TEXT,
-                    reply_markup=choose_category_markup("choose_category_for_subscription")
-                )
-
-        @bot.callback_query_handler(func=lambda call: call.data.startswith("choose_category_for_subscription#"))
-        def choose_category_for_subscription(call):
-            category = Category.objects.get(id=int(call.data.split("#")[1]))
-
-            try:
-                bot.delete_message(
-                    call.message.chat.id,
-                    call.message.message_id
-                )
-            except:
-                pass
-
-            try:
-                bot.send_photo(
-                    call.message.chat.id,
-                    config.BOT_LOGO_IMAGE_ID,
-                    caption=config.CHOOSE_SUBSCRIPTION_BY_CATEGORY_TEXT,
-                    reply_markup=get_currencies_keyboard(category)
-                )
-            except:
-                bot.send_message(
-                    call.message.chat.id,
-                    config.CHOOSE_SUBSCRIPTION_BY_CATEGORY_TEXT,
-                    reply_markup=get_currencies_keyboard(category)
-                )
-
-        @bot.callback_query_handler(func=lambda call: call.data.startswith("choose_currency#"))
-        def choose_currency(call):
-            category = Category.objects.get(id=int(call.data.split("#")[1]))
-            currency = Currency.objects.get(id=int(call.data.split("#")[2]))
-
-            try:
-                bot.delete_message(
-                    call.message.chat.id,
-                    call.message.message_id
-                )
-            except:
-                pass
-
-            try:
-                bot.send_photo(
-                    call.message.chat.id,
-                    config.BOT_LOGO_IMAGE_ID,
-                    caption=config.CHOOSE_SUBSCRIPTION_PRICES_TEXT,
-                    reply_markup=get_subscription_prices_markup(category, currency)
-                )
-            except:
-                bot.send_message(
-                    call.message.chat.id,
-                    config.CHOOSE_SUBSCRIPTION_PRICES_TEXT,
-                    reply_markup=get_subscription_prices_markup(category, currency)
-                )
-
-        @bot.callback_query_handler(func=lambda call: call.data.startswith("choose_subscription_price#"))
-        def choose_subscription_price(call):
-            price = SubscriptionPrice.objects.get(id=int(call.data.split("#")[1]))
-
-            try:
-                bot.delete_message(
-                    call.message.chat.id,
-                    call.message.message_id
-                )
-            except:
-                pass
-
-            try:
-                bot.send_photo(
-                    call.message.chat.id,
-                    config.BOT_LOGO_IMAGE_ID,
-                    caption=config.PRICE_DESCRIPTION_TEXT.format(price.subscription.title, price.price, price.currency.title, price.currency.currency_requisites),
-                    reply_markup=get_payment_contact_markup()
-                )
-            except:
-                bot.send_message(
-                    call.message.chat.id,
-                    config.PRICE_DESCRIPTION_TEXT.format(price.subscription.title, price.price, price.currency.title, price.currency.currency_requisites),
-                    reply_markup=get_payment_contact_markup()
-                )
-
         @bot.message_handler(commands=["start"])
-        def _add_user(message):
+        def add_user_handler(message):
             if User.objects.filter(chat_id=message.chat.id).exists():
                 try:
                     bot.send_photo(
                         message.chat.id,
                         config.BOT_LOGO_IMAGE_ID,
                         caption=config.WELCOME_BACK_TEXT,
-                        reply_markup=main_menu_markup()
+                        reply_markup=get_main_menu_inline_keyboard()
                     )
                 except:
                     bot.send_message(
                         message.chat.id,
                         config.WELCOME_BACK_TEXT,
-                        reply_markup=main_menu_markup()
+                        reply_markup=get_main_menu_inline_keyboard()
                     )
             else:
                 user = User(
@@ -211,109 +75,53 @@ class TeleBotHandlersService:
                         message.chat.id,
                         config.BOT_LOGO_IMAGE_ID,
                         caption=config.START_TEXT,
-                        reply_markup=main_menu_markup()
+                        reply_markup=get_main_menu_inline_keyboard()
                     )
                 except:
                     bot.send_message(
                         message.chat.id,
                         config.START_TEXT,
-                        reply_markup=main_menu_markup()
+                        reply_markup=get_main_menu_inline_keyboard()
                     )
 
-        @bot.message_handler(content_types=["text"])
-        def _buttons_handler(message):
-            if message.text == config.CHOOSE_CATEGORY_BTN_TEXT:
-                try:
-                    bot.send_photo(
-                        message.chat.id,
-                        config.BOT_LOGO_IMAGE_ID,
-                        caption=config.CHOOSE_CATEGORY_TEXT,
-                        reply_markup=choose_category_markup()
-                    )
-                except:
-                    bot.send_message(
-                        message.chat.id,
-                        config.CHOOSE_CATEGORY_TEXT,
-                        reply_markup=choose_category_markup()
-                    )
-            elif message.text == config.GET_SUBSCRIPTION_BTN_TEXT:
-                try:
-                    bot.send_photo(
-                        message.chat.id,
-                        config.BOT_LOGO_IMAGE_ID,
-                        caption=config.CHOOSE_CATEGORY_FOR_SUBSCRIPTION_TEXT,
-                        reply_markup=choose_category_markup("choose_category_for_subscription")
-                    )
-                except:
-                    bot.send_message(
-                        message.chat.id,
-                        config.CHOOSE_CATEGORY_FOR_SUBSCRIPTION_TEXT,
-                        reply_markup=choose_category_markup("choose_category_for_subscription")
-                    )
-            elif message.text == config.ABOUT_BTN_TEXT:
-                try:
-                    bot.send_photo(
-                        message.chat.id,
-                        config.BOT_LOGO_IMAGE_ID,
-                        caption=config.ABOUT_TEXT
-                    )
-                except:
-                    bot.send_message(
-                        message.chat.id,
-                        config.ABOUT_TEXT
-                    )
-            elif message.text == config.HELP_BTN_TEXT:
-                try:
-                    bot.send_photo(
-                        message.chat.id,
-                        config.BOT_LOGO_IMAGE_ID,
-                        caption=config.HELP_TEXT,
-                        reply_markup=help_markup()
-                    )
-                except:
-                    bot.send_message(
-                        message.chat.id,
-                        config.HELP_TEXT,
-                        reply_markup=help_markup()
-                    )
-            elif message.text == config.LINE_TO_SUPPORT_BTN_TEXT:
-                try:
-                    bot.send_photo(
-                        message.chat.id,
-                        config.BOT_LOGO_IMAGE_ID,
-                        caption=config.LINE_TO_SUPPORT_TEXT
-                    )
-                except:
-                    bot.send_message(
-                        message.chat.id,
-                        config.LINE_TO_SUPPORT_TEXT
-                    )
-            elif message.text == config.FAQ_BTN_TEXT:
-                try:
-                    bot.send_photo(
-                        message.chat.id,
-                        config.BOT_LOGO_IMAGE_ID,
-                        caption=config.FAQ_TEXT
-                    )
-                except:
-                    bot.send_message(
-                        message.chat.id,
-                        config.FAQ_TEXT
-                    )
-            elif message.text == config.BACK_BTN_TEXT:
-                try:
-                    bot.send_photo(
-                        message.chat.id,
-                        config.BOT_LOGO_IMAGE_ID,
-                        caption=config.MAIN_MENU_TEXT,
-                        reply_markup=main_menu_markup()
-                    )
-                except:
-                    bot.send_message(
-                        message.chat.id,
-                        config.MAIN_MENU_TEXT,
-                        reply_markup=main_menu_markup()
-                    )
+        @bot.callback_query_handler(func=lambda call: call.data == "main_menu")
+        def main_menu_callback(call):
+            bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=config.START_TEXT, reply_markup=get_main_menu_inline_keyboard())
+
+        @bot.callback_query_handler(func=lambda call: call.data == "find_project")
+        def find_project_callback(call):
+            bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=config.CHOOSE_CATEGORY_TEXT, reply_markup=choose_category_markup())
+
+        @bot.callback_query_handler(func=lambda call: call.data.startswith("choose_category#"))
+        def choose_category_callback(call):
+            _, category_id = call.data.split("#")
+            category = Category.objects.get(id=int(category_id))
+            bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=config.CHOOSE_CURRENCY_TEXT, reply_markup=get_currencies_keyboard(category))
+
+        @bot.callback_query_handler(func=lambda call: call.data.startswith("choose_currency#"))
+        def choose_currency_callback(call):
+            _, category_id, currency_id = call.data.split("#")
+            category = Category.objects.get(id=int(category_id))
+            currency = Currency.objects.get(id=int(currency_id))
+            bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=config.CHOOSE_SUBSCRIPTION_PRICES_TEXT, reply_markup=get_subscription_prices_markup(category, currency))
+
+        @bot.callback_query_handler(func=lambda call: call.data.startswith("choose_subscription_price#"))
+        def choose_price_callback(call):
+            _, price_id = call.data.split("#")
+            price = SubscriptionPrice.objects.get(id=int(price_id))
+            bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=config.PRICE_DESCRIPTION_TEXT.format(price.subscription.title, price.price, price.currency.title, price.currency.currency_requisites), reply_markup=get_payment_contact_markup(price))
+
+        @bot.callback_query_handler(func=lambda call: call.data == "about_callback")
+        def about_callback(call):
+            bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=config.ABOUT_TEXT, reply_markup=get_about_inline_keyboard())
+
+        @bot.callback_query_handler(func=lambda call: call.data == "support_callback")
+        def support_callback(call):
+            bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=config.CONTACT_SUPPORT_TEXT.format(call.message.chat.id), reply_markup=contact_support_inline_keyboard())
+
+        @bot.callback_query_handler(func=lambda call: call.data == "useful_callback")
+        def useful_callback(call):
+            bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=config.USEFUL_TEXT, reply_markup=useful_inline_keyboard())
 
     def execute(self):
         self._run_handlers()

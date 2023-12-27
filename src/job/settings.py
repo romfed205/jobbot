@@ -171,11 +171,6 @@ CONSTANCE_CONFIG = {
         "Текст сообщения, если пользователь повторно вызывает команду активации бота",
         str
     ),
-    "CHOOSE_CATEGORY_TEXT": (
-        "Выберите категорию",
-        "Текст сообщения, приходящий вместе со списком категорий",
-        str
-    ),
     "BUY_SUBSCRIPTION_TO_CHOOSE_CATEGORY_TEXT": (
         "Для активации категории сначала оформите подписку по кнопке ниже",
         "Текст сообщения, приходящий вместе с кнопкой оформления подписки при выборе категории",
@@ -242,9 +237,9 @@ CONSTANCE_CONFIG = {
         "Текст кнопка для перехода к оформлению подписки",
         str
     ),
-    "ABOUT_BTN_TEXT": (
+    "ABOUT_BTN_INLINE": (
         "О сервисе",
-        "Текст кнопка для получения информации о сервисе",
+        "Текст кнопки для получения информации о сервисе",
         str
     ),
     "HELP_BTN_TEXT": (
@@ -331,6 +326,96 @@ CONSTANCE_CONFIG = {
         "Izyaaash",
         "Ник пользователя в телеграм, к которому перенаправляется пользователь по кнопке пожаловаться на автора",
         str
+    ),
+    "CONTACT_SUPPORT_TEXT": (
+        "Поддержка Azar Work bot\n\nПожалуйста, при обращении в поддержку не забывайте отправлять ваш уникальный идентификатор для более оперативного решения проблемы: {0}",
+        "Сообщени при попытке связаться с поддержкой",
+        str
+    ),
+    "USEFUL_TEXT": (
+        "Текст",
+        "Текст из раздела полезного",
+        str
+    ),
+    "CHOOSE_CATEGORY_TEXT": (
+        "Выберите одну из категорий ниже:",
+        "Текст в меню со списком категорий",
+        str
+    ),
+    "PAYMENT_INFO_TEXT": (
+        "Покупка подписки",
+        "Текст сообщения после прохождения всех этапов выбора параметров подписки",
+        str
+    ),
+    "FIND_PROJECT_BTN_INLINE": (
+        "Найти проект",
+        "Кнопка для вывода категорий в боте",
+        str
+    ),
+    "SUPPORT_BTN_INLINE": (
+        "Поддержка",
+        "Кнопка для перехода в меню поддержки",
+        str
+    ),
+    "REVIEWS_BTN_INLINE": (
+        "Отзывы",
+        "Кнопка для перехода к отзывам",
+        str
+    ),
+    "USEFUL_BTN_INLINE": (
+        "Полезное",
+        "Кнопка для перехода к полезному",
+        str
+    ),
+    "OPEN_FAQ_BTN_INLINE": (
+        "Открыть F.A.Q.",
+        "Кнопка для перехода по ссылке FAQ",
+        str
+    ),
+    "NEWS_AND_UPDATES_BTN_INLINE": (
+        "Новости и обновления",
+        "Кнопка для перехода по ссылке новостей и обновлений",
+        str
+    ),
+    "BACK_BTN_INLINE": (
+        "Вернуться назад",
+        "Кнопка для возврата в предыдущий раздел меню",
+        str
+    ),
+    "CONTACT_SUPPORT_BTN_INLINE": (
+        "Связаться с поддержкой",
+        "Кнопка для перехода по ссылке для связи споддержкой",
+        str
+    ),
+    "DIRECTORY_OPEN_BTN_INLINE": (
+        "Открыть справочник",
+        "Кнопка для перехода в раздел справочных материалов",
+        str
+    ),
+    "FAQ_LINK": (
+        "https://google.com/",
+        "Ссылка FAQ",
+        str
+    ),
+    "NEWS_AND_UPDATES_LINK": (
+        "https://google.com/",
+        "Ссылка новостей и обновлений",
+        str
+    ),
+    "CONTACT_SUPPORT_LINK": (
+        "https://google.com/",
+        "Ссылка на поддержку",
+        str
+    ),
+    "REVIEW_LINK": (
+        "https://google.com/",
+        "Ссылка на отзывы",
+        str
+    ),
+    "DIRECTORY_OPEN_LINK": (
+        "https://google.com/",
+        "Ссылка на справочник",
+        str
     )
 }
 
@@ -357,12 +442,7 @@ CONSTANCE_CONFIG_FIELDSETS = {
     },
     "Тексты сообщений": {
         "fields": (
-            "START_TEXT",
-            "WELCOME_BACK_TEXT",
-            "CHOOSE_CATEGORY_TEXT",
             "BUY_SUBSCRIPTION_TO_CHOOSE_CATEGORY_TEXT",
-            "CHOOSE_CURRENCY_TEXT",
-            "ABOUT_TEXT",
             "HELP_TEXT",
             "LINE_TO_SUPPORT_TEXT",
             "FAQ_TEXT",
@@ -372,7 +452,6 @@ CONSTANCE_CONFIG_FIELDSETS = {
             "SUBSCRIPTION_BY_CATEGORY_TEXT",
             "CHOOSE_CATEGORY_FOR_SUBSCRIPTION_TEXT",
             "CHOOSE_SUBSCRIPTION_BY_CATEGORY_TEXT",
-            "CHOOSE_SUBSCRIPTION_PRICES_TEXT"
         ),
         "collapse": True
     },
@@ -380,7 +459,6 @@ CONSTANCE_CONFIG_FIELDSETS = {
         "fields": (
             "CHOOSE_CATEGORY_BTN_TEXT",
             "GET_SUBSCRIPTION_BTN_TEXT",
-            "ABOUT_BTN_TEXT",
             "HELP_BTN_TEXT",
             "LINE_TO_SUPPORT_BTN_TEXT",
             "FAQ_BTN_TEXT",
@@ -388,8 +466,46 @@ CONSTANCE_CONFIG_FIELDSETS = {
             "BACK_BTN_TEXT_INLINE",
             "PAYMENT_CONTACT_BTN_TEXT",
             "VACANCY_AUTHOR_BTN_INLINE",
-            "COMPLAINT_ON_AUTHOR_BTN_INLINE"
+            "COMPLAINT_ON_AUTHOR_BTN_INLINE",
         ),
         "collapse": True
+    },
+    # ----------------------------------------------------------------
+    "Инлайн кнопки": {
+        "fields": (
+            "FIND_PROJECT_BTN_INLINE",
+            "ABOUT_BTN_INLINE",
+            "SUPPORT_BTN_INLINE",
+            "REVIEWS_BTN_INLINE",
+            "USEFUL_BTN_INLINE",
+            "OPEN_FAQ_BTN_INLINE",
+            "NEWS_AND_UPDATES_BTN_INLINE",
+            "BACK_BTN_INLINE",
+            "CONTACT_SUPPORT_BTN_INLINE",
+            "DIRECTORY_OPEN_BTN_INLINE"
+        ),
+        "collapse": True
+    },
+    "Ссылки": {
+        "fields": (
+            "FAQ_LINK",
+            "NEWS_AND_UPDATES_LINK",
+            "CONTACT_SUPPORT_LINK",
+            "REVIEW_LINK",
+            "DIRECTORY_OPEN_LINK"
+        ),
+        "collapse": True
+    },
+    "Тексты": {
+        "fields": (
+            "START_TEXT",
+            "WELCOME_BACK_TEXT",
+            "ABOUT_TEXT",
+            "CONTACT_SUPPORT_TEXT",
+            "CHOOSE_CATEGORY_TEXT",
+            "CHOOSE_CURRENCY_TEXT",
+            "CHOOSE_SUBSCRIPTION_PRICES_TEXT",
+            "PAYMENT_INFO_TEXT",
+        )
     }
 }
