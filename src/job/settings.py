@@ -404,6 +404,7 @@ CONSTANCE_CONFIG_FIELDSETS = {
             "PAYMENT_INFO_TEXT",
             "PRICE_DESCRIPTION_TEXT",
             "ACTIVATE_SUBSCRIPTION_TEXT",
+            "USEFUL_TEXT"
         )
     }
 }
