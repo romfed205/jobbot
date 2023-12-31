@@ -226,6 +226,11 @@ CONSTANCE_CONFIG = {
         "ID лого бота, которое будет отправляться вместе с большей частью текста",
         str
     ),
+    "HOURS_TO_CHECK_DUPLICATES": (
+        5,
+        "Число часов, через которое отправленное пользователям сообщение не является дубликатом",
+        int
+    ),
     "TRACKING_SESSION_NAME": (
         os.getenv("TRACKING_SESSION_NAME"),
         "Название сессии для бота-прослушивальщика",
@@ -261,14 +266,14 @@ CONSTANCE_CONFIG = {
         "Текст из раздела полезного",
         str
     ),
+    "CATEGORY_EXISTS_TEXT": (
+        "У вас уже активна данная категория. Выберите другую или вернитесь в предыдущий раздел меню.",
+        "Текст, который отправляется при нажатии на категорию, которая активна у пользователя",
+        str
+    ),
     "CHOOSE_CATEGORY_TEXT": (
         "Выберите одну из категорий ниже:",
         "Текст в меню со списком категорий",
-        str
-    ),
-    "PAYMENT_INFO_TEXT": (
-        "Покупка подписки",
-        "Текст сообщения после прохождения всех этапов выбора параметров подписки",
         str
     ),
     "FIND_PROJECT_BTN_INLINE": (
@@ -351,6 +356,7 @@ CONSTANCE_CONFIG_FIELDSETS = {
             "ADMIN_CHAT_ID",
             "BOT_INFO_FOOTER",
             "BOT_LOGO_IMAGE_ID",
+            "HOURS_TO_CHECK_DUPLICATES"
         ),
         "collapse": True
     },
@@ -401,10 +407,10 @@ CONSTANCE_CONFIG_FIELDSETS = {
             "CHOOSE_CATEGORY_TEXT",
             "CHOOSE_CURRENCY_TEXT",
             "CHOOSE_SUBSCRIPTION_PRICES_TEXT",
-            "PAYMENT_INFO_TEXT",
             "PRICE_DESCRIPTION_TEXT",
             "ACTIVATE_SUBSCRIPTION_TEXT",
-            "USEFUL_TEXT"
+            "USEFUL_TEXT",
+            "CATEGORY_EXISTS_TEXT"
         )
     }
 }

@@ -7,7 +7,19 @@ from django.shortcuts import render
 from django_admin_inline_paginator.admin import TabularInlinePaginated
 from constance import config
 
-from bot.models import CustomUser, UserCategory, Category, Currency, Subscription, SubscriptionPrice, CategorySubscription, Message, MessageStatus
+from bot.models import (
+    CustomUser,
+    UserCategory,
+    Category,
+    Currency,
+    Subscription,
+    SubscriptionPrice,
+    CategorySubscription,
+    Message,
+    MessageStatus,
+    SpamCheck,
+    SentMessage
+)
 from bot.services.telebot_service.bot_main import bot
 from bot.services.telebot_service.mass_send import mass_send
 from bot.forms import ActivateSubscriptionForm, MassMessageForm, StatusMessageForm, MessageForm
@@ -161,6 +173,22 @@ class MessageAdmin(admin.ModelAdmin):
             self.message_user(request, "Сообщение %s отправлено %d пользователям. %d ошибок отправки" % (message.name, count, errors))
 
     send.short_description = "Отправить"
+
+
+@admin.register(SentMessage)
+class SentMessageAdmin(admin.ModelAdmin):
+    list_display = ("category", "created_at")
+    list_display_links = list_display
+    search_fields = ("text",)
+    list_filter = ("category",)
+
+
+@admin.register(SpamCheck)
+class SpamCheckAdmin(admin.ModelAdmin):
+    list_display = ("title", "is_active")
+    list_display_links = list_display
+    search_fields = ("title", "text")
+    list_filter = ("is_active",)
 
 
 admin.site.unregister(Group)

@@ -3,7 +3,7 @@ from constance import config
 from telebot.types import InputMediaPhoto
 
 from .bot_main import bot
-from bot.models import Category, Subscription, SubscriptionPrice, Currency
+from bot.models import Category, Subscription, SubscriptionPrice, Currency, CustomUser
 from bot.services.telebot_service.keyboards import *
 
 User = get_user_model()
@@ -49,19 +49,13 @@ class TeleBotHandlersService:
         @bot.message_handler(commands=["start"])
         def add_user_handler(message):
             if User.objects.filter(chat_id=message.chat.id).exists():
-                try:
-                    bot.send_photo(
-                        message.chat.id,
-                        config.BOT_LOGO_IMAGE_ID,
-                        caption=config.WELCOME_BACK_TEXT,
-                        reply_markup=get_main_menu_inline_keyboard()
-                    )
-                except:
-                    bot.send_message(
-                        message.chat.id,
-                        config.WELCOME_BACK_TEXT,
-                        reply_markup=get_main_menu_inline_keyboard()
-                    )
+                bot.send_photo(
+                    message.chat.id,
+                    config.BOT_LOGO_IMAGE_ID,
+                    caption=config.WELCOME_BACK_TEXT,
+                    reply_markup=get_main_menu_inline_keyboard(),
+                    parse_mode="MarkdownV2"
+                )
             else:
                 user = User(
                     username=str(message.chat.id),
@@ -70,58 +64,115 @@ class TeleBotHandlersService:
                     chat_id=message.chat.id
                 )
                 user.save()
-                try:
-                    bot.send_photo(
-                        message.chat.id,
-                        config.BOT_LOGO_IMAGE_ID,
-                        caption=config.START_TEXT,
-                        reply_markup=get_main_menu_inline_keyboard()
-                    )
-                except:
-                    bot.send_message(
-                        message.chat.id,
-                        config.START_TEXT,
-                        reply_markup=get_main_menu_inline_keyboard()
-                    )
+                bot.send_photo(
+                    message.chat.id,
+                    config.BOT_LOGO_IMAGE_ID,
+                    caption=config.START_TEXT,
+                    reply_markup=get_main_menu_inline_keyboard(),
+                    parse_mode="MarkdownV2"
+                )
 
         @bot.callback_query_handler(func=lambda call: call.data == "main_menu")
         def main_menu_callback(call):
-            bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=config.START_TEXT, reply_markup=get_main_menu_inline_keyboard())
+            bot.edit_message_caption(
+                chat_id=call.message.chat.id,
+                message_id=call.message.message_id,
+                caption=config.START_TEXT,
+                reply_markup=get_main_menu_inline_keyboard(),
+                parse_mode="MarkdownV2"
+            )
 
         @bot.callback_query_handler(func=lambda call: call.data == "find_project")
         def find_project_callback(call):
-            bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=config.CHOOSE_CATEGORY_TEXT, reply_markup=choose_category_markup())
+            bot.edit_message_caption(
+                chat_id=call.message.chat.id,
+                message_id=call.message.message_id,
+                caption=config.CHOOSE_CATEGORY_TEXT,
+                reply_markup=choose_category_markup(),
+                parse_mode="MarkdownV2"
+            )
 
         @bot.callback_query_handler(func=lambda call: call.data.startswith("choose_category#"))
         def choose_category_callback(call):
             _, category_id = call.data.split("#")
             category = Category.objects.get(id=int(category_id))
-            bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=config.CHOOSE_CURRENCY_TEXT, reply_markup=get_currencies_keyboard(category))
+            user = User.objects.get(chat_id=int(call.message.chat.id))
+            if user.have_active_category(category):
+                markup = choose_category_markup()
+                text = config.CATEGORY_EXISTS_TEXT
+            else:
+                markup = get_currencies_keyboard(category)
+                text = config.CHOOSE_CURRENCY_TEXT
+
+            bot.edit_message_caption(
+                chat_id=call.message.chat.id,
+                message_id=call.message.message_id,
+                caption=text,
+                reply_markup=markup,
+                parse_mode="MarkdownV2"
+            )
 
         @bot.callback_query_handler(func=lambda call: call.data.startswith("choose_currency#"))
         def choose_currency_callback(call):
             _, category_id, currency_id = call.data.split("#")
             category = Category.objects.get(id=int(category_id))
             currency = Currency.objects.get(id=int(currency_id))
-            bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=config.CHOOSE_SUBSCRIPTION_PRICES_TEXT, reply_markup=get_subscription_prices_markup(category, currency))
+            bot.edit_message_caption(
+                chat_id=call.message.chat.id,
+                message_id=call.message.message_id,
+                caption=config.CHOOSE_SUBSCRIPTION_PRICES_TEXT,
+                reply_markup=get_subscription_prices_markup(category, currency),
+                parse_mode="MarkdownV2"
+            )
 
         @bot.callback_query_handler(func=lambda call: call.data.startswith("choose_subscription_price#"))
         def choose_price_callback(call):
             _, price_id = call.data.split("#")
             price = SubscriptionPrice.objects.get(id=int(price_id))
-            bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=config.PRICE_DESCRIPTION_TEXT.format(price.subscription.title, price.price, price.currency.title, price.currency.currency_requisites), reply_markup=get_payment_contact_markup(price))
+            bot.edit_message_caption(
+                chat_id=call.message.chat.id,
+                message_id=call.message.message_id,
+                caption=config.PRICE_DESCRIPTION_TEXT.format(
+                    price.subscription.title,
+                    price.price,
+                    price.currency.title,
+                    price.currency.currency_requisites
+                ),
+                reply_markup=get_payment_contact_markup(price),
+                parse_mode="MarkdownV2"
+            )
 
         @bot.callback_query_handler(func=lambda call: call.data == "about_callback")
         def about_callback(call):
-            bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=config.ABOUT_TEXT, reply_markup=get_about_inline_keyboard())
+            bot.edit_message_caption(
+                chat_id=call.message.chat.id,
+                message_id=call.message.message_id,
+                caption=config.ABOUT_TEXT,
+                reply_markup=get_about_inline_keyboard(),
+                parse_mode="MarkdownV2"
+            )
 
         @bot.callback_query_handler(func=lambda call: call.data == "support_callback")
         def support_callback(call):
-            bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=config.CONTACT_SUPPORT_TEXT.format(call.message.chat.id), reply_markup=contact_support_inline_keyboard())
+            bot.edit_message_caption(
+                chat_id=call.message.chat.id,
+                message_id=call.message.message_id,
+                caption=config.CONTACT_SUPPORT_TEXT.format(
+                    call.message.chat.id
+                ),
+                reply_markup=contact_support_inline_keyboard(),
+                parse_mode="MarkdownV2"
+            )
 
         @bot.callback_query_handler(func=lambda call: call.data == "useful_callback")
         def useful_callback(call):
-            bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=config.USEFUL_TEXT, reply_markup=useful_inline_keyboard())
+            bot.edit_message_caption(
+                chat_id=call.message.chat.id,
+                message_id=call.message.message_id,
+                caption=config.USEFUL_TEXT,
+                reply_markup=useful_inline_keyboard(),
+                parse_mode="MarkdownV2"
+            )
 
     def execute(self):
         self._run_handlers()

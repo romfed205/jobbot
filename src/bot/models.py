@@ -46,11 +46,9 @@ class CustomUser(AbstractUser):
         return f"{self.telegram} {self.chat_id}"
 
     def have_active_category(self, category):
-        if not UserCategory.objects.filter(user=self, category=category).exists():
-            return None, False
-
-        user_category = UserCategory.objects.filter(user=self, category=category).first()
-        return user_category, user_category.is_active
+        if UserCategory.objects.filter(user=self, category=category).exists():
+            return True
+        return False
 
     def activate_subscription(self, subscription, category):
         delta = subscription.get_delta()
@@ -269,3 +267,38 @@ class MessageStatus(models.Model):
     class Meta:
         verbose_name = "статус рассылки"
         verbose_name_plural = "Статусы рассылок"
+
+
+class SentMessage(models.Model):
+    text = models.TextField("Текст")
+    category = models.ForeignKey(
+        "bot.Category",
+        on_delete=models.CASCADE,
+        related_name="sent_messages",
+        verbose_name="Категория"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "отправленное сообщение"
+        verbose_name_plural = "Отправленные сообщения"
+
+    def __str__(self):
+        return self.text[:20]
+
+
+class SpamCheck(models.Model):
+    title = models.CharField("Название", max_length=100)
+    text = models.TextField("Текст")
+    is_active = models.BooleanField("Активен", default=True)
+
+    class Meta:
+        verbose_name = "проверку спама"
+        verbose_name_plural = "Проверки спама"
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        self.text = self.text.lower().strip()
+        super(SpamCheck, self).save(*args, **kwargs)
