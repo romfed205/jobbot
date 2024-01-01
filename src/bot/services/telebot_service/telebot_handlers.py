@@ -134,7 +134,7 @@ class TeleBotHandlersService:
                 message_id=call.message.message_id,
                 caption=config.PRICE_DESCRIPTION_TEXT.format(
                     price.subscription.title,
-                    price.price,
+                    str(price.price).replace(".", ","),
                     price.currency.title,
                     price.currency.currency_requisites
                 ),
