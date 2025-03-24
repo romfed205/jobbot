@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
 from pathlib import Path
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -48,7 +49,6 @@ INSTALLED_APPS = [
     "bot_tracker"
 ]
 
-AUTH_USER_MODEL = "bot.CustomUser"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -65,7 +65,6 @@ ROOT_URLCONF = 'job.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -85,15 +84,16 @@ WSGI_APPLICATION = 'job.wsgi.application'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": os.getenv("POSTGRES_DB", "bot_checker"),
-        "USER": os.getenv("POSTGRES_USER", "bot_checker"),
-        "PASSWORD": os.getenv("POSTGRES_PASSWORD", "bot_checker"),
-        "HOST": os.getenv("POSTGRES_HOST", "localhost"),
-        "PORT": os.getenv("POSTGRES_PORT", 5432),
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+# Override database settings if DATABASE_URL is set (for Heroku)
+db_from_env = dj_database_url.config(conn_max_age=600)
+if db_from_env:
+    DATABASES['default'].update(db_from_env)
 
 
 # Password validation
@@ -118,7 +118,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-LANGUAGE_CODE = 'ru-ru'
+LANGUAGE_CODE = 'en-en'
 
 TIME_ZONE = 'UTC'
 
@@ -127,16 +127,6 @@ USE_I18N = True
 USE_TZ = True
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
-
-STATIC_URL = "/staticfiles/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-
-MEDIA_DIR = os.path.join(BASE_DIR, "media")
-MEDIA_ROOT = MEDIA_DIR
-MEDIA_URL = "/media/"
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
@@ -144,9 +134,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 BOT_TOKEN = os.getenv("BOT_TOKEN")
 
-CSRF_TRUSTED_ORIGINS = ["https://6289-178-66-156-0.ngrok-free.app"]
-
-CONSTANCE_BACKEND = "constance.backends.database.DatabaseBackend"
 
 CONSTANCE_CONFIG = {
     "ACTIVATE_SUBSCRIPTION_TEXT": (
